@@ -11,14 +11,15 @@ typedef union {
 
 // Computes x ^ y mod p (where ^ is exponentiation)
 // x and y can be anything != 0, p must be prime!
-// x is 64 bit because we don't want to overflow it on squaring
-uint32_t modular_exponentiation(uint64_t x, uint32_t y, uint32_t p) {
+uint32_t modular_exponentiation(uint32_t x, uint32_t y, uint32_t p) {
+    // 64 bit because we don't want to overflow it on squaring
     uint64_t counter = 1;
+    uint64_t base = x;
     while (y > 0){
         if (y % 2 == 1) {
-            counter = (counter * x) % p;
+            counter = (counter * base) % p;
         }
-        x = (x * x) % p;
+        base = (base * base) % p;
         y = y / 2;
     }
     return (uint32_t) counter;
