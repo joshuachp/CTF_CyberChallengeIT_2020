@@ -3,11 +3,42 @@
 #include <stdint.h>
 
 #define INT_AMOUNT 4
+#define PRIME (((uint32_t) 1 << 31) - 1)
+
+// Remove this when releasing the crackme!
+#define IS_DEBUG
+
+// The password will be "CTF-AEKmgKRRIHP3"
+// This gives these 4 ints: 0x49674143 0x484B4554 0x50524B46 0x33526D2D
 
 typedef union {
     char bytes[INT_AMOUNT * sizeof(uint32_t)];
     uint32_t numbers[INT_AMOUNT];
 } pass_data;
+
+#ifdef IS_DEBUG
+// Useful for showing how the data is being processed
+void dump_data(pass_data data){
+    for (uint32_t i = 0; i < sizeof(uint32_t) * INT_AMOUNT; i++){
+        printf("0x%02X ", data.bytes[i]);
+    }
+    puts("");
+    for (uint32_t i = 0; i < sizeof(INT_AMOUNT); i++){
+        printf("0x%08X ", data.numbers[i]);
+    }
+    puts("");
+}
+#endif
+
+uint32_t modular_exponentiation(uint32_t x, uint32_t y, uint32_t p);
+uint8_t first_check(uint32_t n);
+
+
+uint8_t first_check(uint32_t n) {
+    return modular_exponentiation(0xDEADBEEF, n, PRIME) == 0x3863CE45;
+}
+
+
 
 // Computes x ^ y mod p (where ^ is exponentiation)
 // x and y can be anything != 0, p must be prime!
@@ -55,10 +86,10 @@ int main(int argc, const char** argv) {
             k++;
         }
     }
-    // Equivalent of python's pow(3, 1337, 17)
-    printf("Test numbers: %d ^ %d %% %d = %d\n", 3, 1337, 17, modular_exponentiation(3, 1337, 17));
-
-    printf("Before: %08X\nAfter: %d", to_compute.numbers[0], modular_exponentiation(to_compute.numbers[0], 101, 17));
-
+    
+    #ifdef IS_DEBUG
+    dump_data(to_compute);
+    printf("First check: %d\n", first_check(to_compute.numbers[0]));
+    #endif
 
 }
