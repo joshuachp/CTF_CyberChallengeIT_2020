@@ -48,12 +48,30 @@ uint32_t first_check(uint32_t n) {
 }
 
 uint32_t second_check(uint32_t n){
+    n = first_check(n);
     const uint8_t* text = (uint8_t*) "To be fair, you have to have a very high IQ to understand Rick and Morty. The humour is extremely subtle, and without a solid grasp of theoretical physics most of the jokes will go over a typical viewer's head. There's also Rick's nihilistic outlook, which is deftly woven into his characterisation- his personal philosophy draws heavily from Narodnaya Volya literature, for instance. The fans understand this stuff; they have the intellectual capacity to truly appreciate the depths of these jokes, to realise that they're not just funny- they say something deep about LIFE. As a consequence people who dislike Rick & Morty truly ARE idiots- of course they wouldn't appreciate, for instance, the humour in Rick's existential catchphrase \"Wubba Lubba Dub Dub,\" which itself is a cryptic reference to Turgenev's Russian epic Fathers and Sons. I'm smirking right now just imagining one of those addlepated simpletons scratching their heads in confusion as Dan Harmon's genius wit unfolds itself on their television screens. What fools.. how I pity them. And yes, by the way, i DO have a Rick & Morty tattoo. And no, you cannot see it. It's for the ladies' eyes only- and even then they have to demonstrate that they're within 5 IQ points of my own (preferably lower) beforehand. Nothin personnel kid";
     uint8_t* bytes = (uint8_t*)&n;
     for (uint32_t i = 0; i < 1297; i++){
         bytes[i % 4] ^= text[i];
     }
     return n;
+}
+
+uint32_t third_check(uint32_t n){
+    n = second_check(n);
+    const uint8_t random_permutation[256] = { 152, 209, 239, 114, 59, 44, 107, 142, 121, 201, 72, 185, 31, 204, 82, 60, 213, 205, 155, 81, 207, 61, 147, 233, 66, 87, 138, 183, 11, 220, 26, 122, 19, 198, 219, 24, 177, 106, 100, 99, 30, 143, 95, 141, 68, 124, 221, 84, 29, 105, 216, 180, 46, 232, 39, 130, 1, 245, 37, 52, 73, 45, 148, 5, 53, 16, 40, 129, 48, 22, 62, 65, 165, 215, 103, 151, 70, 83, 109, 33, 125, 131, 234, 123, 206, 203, 116, 56, 42, 214, 3, 89, 96, 94, 156, 15, 195, 196, 51, 189, 197, 146, 108, 179, 160, 132, 91, 64, 170, 243, 75, 35, 55, 173, 10, 240, 191, 120, 92, 113, 118, 171, 144, 149, 28, 80, 200, 236, 238, 126, 76, 172, 181, 139, 230, 167, 227, 182, 211, 21, 136, 134, 137, 222, 13, 38, 12, 184, 104, 241, 77, 93, 174, 32, 41, 79, 176, 218, 210, 175, 188, 199, 57, 229, 168, 231, 2, 150, 36, 159, 47, 247, 85, 166, 248, 145, 228, 25, 74, 67, 158, 157, 212, 115, 162, 187, 135, 98, 154, 255, 0, 97, 14, 161, 71, 194, 119, 9, 190, 88, 249, 169, 27, 225, 153, 163, 110, 217, 78, 164, 237, 140, 8, 253, 58, 63, 43, 54, 235, 226, 111, 186, 102, 101, 69, 7, 250, 254, 34, 23, 246, 127, 251, 252, 4, 17, 117, 224, 223, 18, 112, 193, 244, 192, 6, 242, 49, 202, 208, 86, 20, 133, 128, 90, 178, 50 };
+    for (int i = 0; i < 1024; i++){
+        n = modular_exponentiation(i + 2, n, PRIME);
+        uint8_t* bytes = (uint8_t*) &n;
+        for (int j = 0; j < sizeof(uint32_t); j++){
+            bytes[j] = random_permutation[bytes[j]];
+        }
+    }
+    return n;
+}
+
+uint32_t fourth_check(uint32_t n){
+    n = third_check(n);
 }
 
 
