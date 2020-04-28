@@ -1,14 +1,5 @@
 /* BASIC */
 
-html {
-    background-color: #56baed;
-}
-
-body {
-    font-family: "Poppins", sans-serif;
-    height: 100vh;
-}
-
 a {
     color: #92badd;
     display: inline-block;
@@ -26,6 +17,11 @@ h2 {
     color: #cccccc;
 }
 /* STRUCTURE */
+
+.background {
+    background-color: #56baed;
+    height: 100vh;
+}
 
 .wrapper {
     display: flex;
@@ -273,5 +269,6 @@ input[type="text"]:placeholder {
 }
 
 #icon {
-    width: 60%;
+    height: 124px;
+    width: 124px;
 }
