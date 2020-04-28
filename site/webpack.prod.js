@@ -2,7 +2,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     target: "node",
-    mode: "development",
+    mode: "production",
     plugins: [
         new CopyPlugin([
             // This wasm file will be fetched dynamically when we initialize sql.js
