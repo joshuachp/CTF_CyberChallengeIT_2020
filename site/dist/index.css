@@ -1,7 +1,7 @@
 /* BASIC */
 
 a {
-    color: #92badd;
+    color: lightgreen;
     display: inline-block;
     text-decoration: none;
     font-weight: 400;
@@ -19,7 +19,7 @@ h2 {
 /* STRUCTURE */
 
 .background {
-    background-color: #56baed;
+    background-color: black;
     height: 100vh;
 }
 
@@ -64,7 +64,7 @@ h2.inactive {
 
 h2.active {
     color: #0d0d0d;
-    border-bottom: 2px solid #5fbae9;
+    border-bottom: 2px solid green;
 }
 
 /* FORM TYPOGRAPHY*/
@@ -72,7 +72,7 @@ h2.active {
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
-    background-color: #56baed;
+    background-color: darkgreen;
     border: none;
     color: white;
     padding: 15px 80px;
@@ -96,7 +96,7 @@ input[type="reset"] {
 input[type="button"]:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover {
-    background-color: #39ace7;
+    background-color: green;
 }
 
 input[type="button"]:active,
@@ -132,7 +132,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     background-color: #fff;
-    border-bottom: 2px solid #5fbae9;
+    border-bottom: 2px solid green;
 }
 
 input[type="text"]:placeholder {
@@ -249,7 +249,7 @@ input[type="text"]:placeholder {
     bottom: -10px;
     width: 0;
     height: 2px;
-    background-color: #56baed;
+    background-color: green;
     content: "";
     transition: width 0.2s;
 }
