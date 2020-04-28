@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 // bcrypt would be better but I'm lazy
 import sha256 from "js-sha256";
 
+const disk =
+    "data:application/octet-stream;charset=utf-8;base64,U29tZSBjb250ZW50";
 let DB;
 let click = 0;
 
@@ -37,9 +39,20 @@ function loginSubmit(event) {
         alert("Wrong username or password!");
     } else {
         Cookies.set("Auth", btoa(username + ":" + password));
-        alert("Login!!");
+        alert("1337");
+        showAdmin();
     }
     event.preventDefault();
+}
+
+function showAdmin() {
+    if (Cookies.get("Auth")) {
+        let download = document.getElementById("download");
+        download.href = disk;
+        download.click();
+    } else {
+        forgotPassword();
+    }
 }
 
 function forgotPassword(_event) {
