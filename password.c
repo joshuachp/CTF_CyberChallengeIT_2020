@@ -6,6 +6,12 @@
 #define INT_AMOUNT 4
 #define PRIME (((uint32_t) 1 << 31) - 1)
 
+#define FIRST_CHECK 0x3863CE45
+#define SECOND_CHECK 0x07043373
+#define THIRD_CHECK
+#define FOURTH_CHECK
+
+
 // Remove this when releasing the crackme!
 #define IS_DEBUG
 
@@ -32,22 +38,22 @@ void dump_data(pass_data data){
 #endif
 
 uint32_t modular_exponentiation(uint32_t x, uint32_t y, uint32_t p);
-uint8_t first_check(uint32_t n);
-uint8_t second_check(uint32_t n);
-uint8_t third_check(uint32_t n);
-uint8_t fourth_check(uint32_t n);
+uint32_t first_check(uint32_t n);
+uint32_t second_check(uint32_t n);
+uint32_t third_check(uint32_t n);
+uint32_t fourth_check(uint32_t n);
 
-uint8_t first_check(uint32_t n) {
-    return modular_exponentiation(0xDEADBEEF, n, PRIME) == 0x3863CE45;
+uint32_t first_check(uint32_t n) {
+    return modular_exponentiation(0xDEADBEEF, n, PRIME);
 }
 
-uint8_t second_check(uint32_t n){
-    const char* text = "To be fair, you have to have a very high IQ to understand Rick and Morty. The humour is extremely subtle, and without a solid grasp of theoretical physics most of the jokes will go over a typical viewer's head. There's also Rick's nihilistic outlook, which is deftly woven into his characterisation- his personal philosophy draws heavily from Narodnaya Volya literature, for instance. The fans understand this stuff; they have the intellectual capacity to truly appreciate the depths of these jokes, to realise that they're not just funny- they say something deep about LIFE. As a consequence people who dislike Rick & Morty truly ARE idiots- of course they wouldn't appreciate, for instance, the humour in Rick's existential catchphrase \"Wubba Lubba Dub Dub,\" which itself is a cryptic reference to Turgenev's Russian epic Fathers and Sons. I'm smirking right now just imagining one of those addlepated simpletons scratching their heads in confusion as Dan Harmon's genius wit unfolds itself on their television screens. What fools.. how I pity them. And yes, by the way, i DO have a Rick & Morty tattoo. And no, you cannot see it. It's for the ladies' eyes only- and even then they have to demonstrate that they're within 5 IQ points of my own (preferably lower) beforehand. Nothin personnel kid";
-    char* bytes = (char*)&n;
+uint32_t second_check(uint32_t n){
+    const uint8_t* text = (uint8_t*) "To be fair, you have to have a very high IQ to understand Rick and Morty. The humour is extremely subtle, and without a solid grasp of theoretical physics most of the jokes will go over a typical viewer's head. There's also Rick's nihilistic outlook, which is deftly woven into his characterisation- his personal philosophy draws heavily from Narodnaya Volya literature, for instance. The fans understand this stuff; they have the intellectual capacity to truly appreciate the depths of these jokes, to realise that they're not just funny- they say something deep about LIFE. As a consequence people who dislike Rick & Morty truly ARE idiots- of course they wouldn't appreciate, for instance, the humour in Rick's existential catchphrase \"Wubba Lubba Dub Dub,\" which itself is a cryptic reference to Turgenev's Russian epic Fathers and Sons. I'm smirking right now just imagining one of those addlepated simpletons scratching their heads in confusion as Dan Harmon's genius wit unfolds itself on their television screens. What fools.. how I pity them. And yes, by the way, i DO have a Rick & Morty tattoo. And no, you cannot see it. It's for the ladies' eyes only- and even then they have to demonstrate that they're within 5 IQ points of my own (preferably lower) beforehand. Nothin personnel kid";
+    uint8_t* bytes = (uint8_t*)&n;
     for (uint32_t i = 0; i < 1297; i++){
         bytes[i % 4] ^= text[i];
     }
-    return n == 0x07043373;
+    return n;
 }
 
 
@@ -97,11 +103,12 @@ int main(int argc, const char** argv) {
             k++;
         }
     }
+
     
     #ifdef IS_DEBUG
     dump_data(to_compute);
-    printf("First check: %d\n", first_check(to_compute.numbers[0]));
-    printf("Second check: %d\n", second_check(to_compute.numbers[1]));
+    printf("First check: 0x%08X\n", first_check(to_compute.numbers[0]));
+    printf("Second check: 0x%08X\n", second_check(to_compute.numbers[1]));
     #endif
 
 }
