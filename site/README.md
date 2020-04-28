@@ -14,5 +14,6 @@ Serve però servirlo con un server, visto dei problemi di CORS con WAsm. Un
 metodo facile può essere:
 
 ```bash
+cd dist
 python2 -m SimpleHTTPServer
 ```
