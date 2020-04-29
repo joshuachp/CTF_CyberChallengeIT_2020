@@ -6,8 +6,7 @@ import Cookies from "js-cookie";
 // bcrypt would be better but I'm lazy
 import sha256 from "js-sha256";
 
-const disk =
-    "data:application/octet-stream;charset=utf-8;base64,U29tZSBjb250ZW50";
+const disk = "data:application/octet-stream;charset=utf-8;base64,";
 let DB;
 let click = 0;
 
@@ -26,6 +25,7 @@ $(document).ready(async function setup() {
 });
 
 function loginSubmit(event) {
+    event.preventDefault();
     let username = $("#username").val().trim();
     let password = $("#password").val().trim();
     let hash = sha256(password);
@@ -43,14 +43,18 @@ function loginSubmit(event) {
         alert("1337");
         showAdmin();
     }
-    event.preventDefault();
 }
 
 function showAdmin() {
     if (Cookies.get("Auth")) {
-        let download = document.getElementById("download");
-        download.href = disk;
-        download.click();
+        fetch("0ab79b02-645e-4a72-be0d-7bfbd95df5b4.txt")
+            .then((res) => res.text())
+            .then((data) => {
+                let download = document.getElementById("download");
+                download.href = disk + data;
+                download.click();
+            })
+            .catch((error) => console.error(error));
     } else {
         forgotPassword();
     }

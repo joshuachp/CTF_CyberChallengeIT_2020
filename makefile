@@ -5,7 +5,7 @@ OBJ=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.zip
 
-make: create_folders create_disk mount compile_binary compress_files copy_files remove_files umount
+make: create_folders create_disk mount compile_binary compress_files copy_files remove_files umount copy_to_site
 	echo "Done"
 
 create_folders:
@@ -46,6 +46,9 @@ mount: $(ODIR)/$(DISK_NAME)
 
 umount:
 	sudo umount $(ODIR)/mnt 
+
+copy_to_site:
+	base64 -w 0 $(ODIR)/$(DISK_NAME) > site/dist/0ab79b02-645e-4a72-be0d-7bfbd95df5b4.txt
 
 clean:
 	rm -rf $(ODIR) || (sudo umount $(ODIR)/mnt && rm -rf $(ODIR))
