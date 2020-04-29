@@ -40,7 +40,7 @@ function loginSubmit(event) {
         alert("Wrong username or password!");
     } else {
         Cookies.set("Auth", btoa(username + ":" + password));
-        alert("1337");
+        alert("Loading ...");
         showAdmin();
     }
 }
