@@ -58,7 +58,7 @@ function showAdmin() {
 
 function forgotPassword(_event) {
     if (click == 0) {
-        alert("Bruh!");
+        alert("Bruh! WhoNnA RetRy? 0.o");
     } else if (click == 1) {
         alert("A shit here we go again!");
     } else if (click == 2) {
