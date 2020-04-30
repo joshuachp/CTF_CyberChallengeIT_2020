@@ -41,7 +41,7 @@ remove_files: $(ODIR)/mnt/$(ARC_NAME)
 	sudo umount $(ODIR)/mnt 
 	sudo mount $(ODIR)/$(DISK_NAME) $(ODIR)/mnt
 # Rimuovo i file da nascondere
-	sudo rm $^
+	sudo unlink $^
 
 mount: $(ODIR)/$(DISK_NAME)
 	sudo mount $(ODIR)/$(DISK_NAME) $(ODIR)/mnt
