@@ -1,16 +1,16 @@
 CC=gcc
-CFLAGS=-m32 -fno-stack-protector
+CFLAGS=-fno-stack-protector
 ODIR=build
 OBJ=crackme
 DISK_NAME=disk
-ARC_NAME=sneaky.zip
+ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk mount compile_binary compress_files copy_files remove_files umount copy_to_site
+make: create_folders create_disk compile_binary compress_files mount_disk copy_files remove_files umount_disk copy_to_site
 	echo "Done"
 
 create_folders:
 # Cartella per i file compressi
-	mkdir -p $(ODIR)/archive
+	mkdir -p $(ODIR)/archive/cache
 # Cartella per il binary
 	mkdir -p $(ODIR)/binary
 # Cartella per montare il disco
@@ -20,19 +20,19 @@ create_disk:
 # Creo file da 1MB con solo 0 bytes
 	dd if=/dev/zero of=$(ODIR)/$(DISK_NAME) count=1024
 # Converto il file in un fylesystem ext2
-	mkfs -t ext2 -i 1024 -b 1024 -F  $(ODIR)/$(DISK_NAME)
+	mkfs -t ext2 $(ODIR)/$(DISK_NAME)
 
 compile_binary: binary/password.c
-# Compilo
 	$(CC) -o $(ODIR)/binary/$(OBJ) $(CFLAGS) $^
-# Faccio lo strip del binary
-	strip $(ODIR)/binary/$(OBJ)
 
-compress_files: $(ODIR)/binary/$(OBJ) filesystem/archive/helpful.png
+compress_files: $(ODIR)/binary/$(OBJ)
+# Copi i file in dir
+	cp $^ $(ODIR)/archive/cache
 # Comprimo i file
-	zip -j $(ODIR)/archive/$(ARC_NAME) $^
+#	zip -j $(ODIR)/archive/$(ARC_NAME) $^
+	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
-copy_files: filesystem/stage.txt $(ODIR)/archive/$(ARC_NAME)
+copy_files: filesystem/stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png
 # Copio i file
 	sudo cp $^ $(ODIR)/mnt
 
@@ -41,12 +41,12 @@ remove_files: $(ODIR)/mnt/$(ARC_NAME)
 	sudo umount $(ODIR)/mnt 
 	sudo mount $(ODIR)/$(DISK_NAME) $(ODIR)/mnt
 # Rimuovo i file da nascondere
-	sudo rm $^
+	sudo unlink $^
 
-mount: $(ODIR)/$(DISK_NAME)
+mount_disk: $(ODIR)/$(DISK_NAME)
 	sudo mount $(ODIR)/$(DISK_NAME) $(ODIR)/mnt
 
-umount:
+umount_disk:
 	sudo umount $(ODIR)/mnt 
 
 copy_to_site:
