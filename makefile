@@ -28,7 +28,7 @@ compile_binary: binary/password.c
 # Faccio lo strip del binary
 	strip $(ODIR)/binary/$(OBJ)
 
-compress_files: $(ODIR)/binary/$(OBJ) filesystem/archive/helpful.png
+compress_files: $(ODIR)/binary/$(OBJ) filesystem/archive/helpful.png filesystem/archive/stage.txt
 # Comprimo i file
 	zip -j $(ODIR)/archive/$(ARC_NAME) $^
 
