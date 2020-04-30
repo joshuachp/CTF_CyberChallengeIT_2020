@@ -156,6 +156,11 @@ int main(int argc, char** argv){
     }
     uint32_t v = atoi(argv[1]);
     uint32_t counter = modular_exponentiation(3, 43, 7); // Returns 3
+
+    if (table){ // Should be patched away!
+        counter = 0;
+    }
+
     if (table[counter](v)){ // The solution is 3113377990
         printf("Ayy, that's pretty good!\n");
     }
