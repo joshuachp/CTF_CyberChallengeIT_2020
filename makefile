@@ -20,7 +20,7 @@ create_disk:
 # Creo file da 1MB con solo 0 bytes
 	dd if=/dev/zero of=$(ODIR)/$(DISK_NAME) count=1024
 # Converto il file in un fylesystem ext2
-	mkfs -t ext2 -i 1024 -b 1024 -F  $(ODIR)/$(DISK_NAME)
+	mkfs -t ext2 $(ODIR)/$(DISK_NAME)
 
 compile_binary: binary/password.c
 	$(CC) -o $(ODIR)/binary/$(OBJ) $(CFLAGS) $^
