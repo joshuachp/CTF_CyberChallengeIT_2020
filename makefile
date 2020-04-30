@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-m32 -fno-stack-protector
+CFLAGS=-fno-stack-protector
 ODIR=build
 OBJ=crackme
 DISK_NAME=disk
