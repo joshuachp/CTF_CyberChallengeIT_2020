@@ -11,6 +11,8 @@
 #define THIRD_CHECK
 #define FOURTH_CHECK
 
+#define SEVENTH_CHECK
+
 
 // Remove this when releasing the crackme!
 #define IS_DEBUG
@@ -46,6 +48,9 @@ uint32_t first_check(uint32_t n);
 uint32_t second_check(uint32_t n);
 uint32_t third_check(uint32_t n);
 vector fourth_check(uint32_t n);
+uint32_t fifth_check(uint32_t n);
+uint32_t sixth_check(uint32_t n);
+uint32_t seventh_check(uint32_t n);
 
 uint32_t first_check(uint32_t n) {
     return modular_exponentiation(0xDEADBEEF, n, PRIME);
@@ -87,6 +92,37 @@ vector fourth_check(uint32_t n){  // This will be the equivalent of finding a so
     return (vector) {.numbers = {v1, v2, v3, v4}};
 }
 
+uint32_t fifth_check(uint32_t n){   // Optional
+    // Computes the collatz conjecture for n
+    uint32_t counter = 0;
+    while (n > 1){
+        counter++;
+        if (n % 2 == 1) {
+            n = 3*n + 1;
+        }
+        else{
+            n = n / 2;
+        }
+    }
+    return counter;
+}
+
+uint32_t sixth_check(uint32_t n){   // Optional
+    // Computes nth fibonacci mod PRIME
+    uint32_t a = 1;
+    uint32_t b = 1;
+    uint32_t tmp = 1;
+    for (int i = 0; i < n; i++){
+        tmp = b;
+        b = (a + b) % PRIME;
+        a = tmp;
+    }
+    return a;
+}
+
+uint32_t seventh_check(uint32_t n){ // Optional
+    return 0; // Todo
+}
 
 // Computes x ^ y mod p (where ^ is exponentiation)
 // x and y can be anything != 0, p must be prime!
