@@ -3,7 +3,7 @@ CFLAGS=-fno-stack-protector
 ODIR=build
 OBJ=crackme
 DISK_NAME=disk
-ARC_NAME=sneaky.zip
+ARC_NAME=sneaky.tar.gz
 
 make: create_folders create_disk mount compile_binary compress_files copy_files remove_files umount copy_to_site
 	echo "Done"
@@ -30,10 +30,10 @@ compile_binary: binary/password.c
 
 compress_files: $(ODIR)/binary/$(OBJ)
 # Copi i file in dir
-#	cp $^ $(ODIR)/archive/cache
+	cp $^ $(ODIR)/archive/cache
 # Comprimo i file
-	zip -j $(ODIR)/archive/$(ARC_NAME) $^
-# tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
+#	zip -j $(ODIR)/archive/$(ARC_NAME) $^
+  tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
 copy_files: filesystem/stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png
 # Copio i file
