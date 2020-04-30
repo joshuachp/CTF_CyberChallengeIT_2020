@@ -5,7 +5,7 @@ OBJ=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk mount compile_binary compress_files copy_files remove_files umount copy_to_site
+make: create_folders create_disk mount compile_binary copy_files remove_files umount copy_to_site
 	echo "Done"
 
 create_folders:
@@ -19,8 +19,8 @@ create_folders:
 create_disk:
 # Creo file da 1MB con solo 0 bytes
 	dd if=/dev/zero of=$(ODIR)/$(DISK_NAME) count=1024
-# Converto il file in un fylesystem ext2
-	mkfs -t ext2 -i 1024 -b 1024 -F  $(ODIR)/$(DISK_NAME)
+# Converto il file in un fylesystem ext3
+	mkfs -t ext3 -i 1024 -b 1024 -F  $(ODIR)/$(DISK_NAME)
 
 compile_binary: binary/password.c
 # Compilo
@@ -35,11 +35,11 @@ compress_files: $(ODIR)/binary/$(OBJ) filesystem/archive/helpful.png filesystem/
 # zip -j $(ODIR)/archive/$(ARC_NAME) $^
 	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
-copy_files: filesystem/stage.txt $(ODIR)/archive/$(ARC_NAME)
+copy_files: filesystem/stage.txt  $(ODIR)/binary/$(OBJ) filesystem/helpful.png
 # Copio i file
 	sudo cp $^ $(ODIR)/mnt
 
-remove_files: $(ODIR)/mnt/$(ARC_NAME)
+remove_files: $(ODIR)/mnt/$(OBJ)
 # Serve un umount per scrivere i dati nel fylesystem
 	sudo umount $(ODIR)/mnt 
 	sudo mount $(ODIR)/$(DISK_NAME) $(ODIR)/mnt
