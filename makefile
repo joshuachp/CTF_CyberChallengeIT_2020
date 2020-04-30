@@ -26,7 +26,7 @@ compile_binary: binary/password.c
 # Compilo
 	$(CC) -o $(ODIR)/binary/$(OBJ) $(CFLAGS) $^
 # Faccio lo strip del binary
-	strip $(ODIR)/binary/$(OBJ)
+# strip $(ODIR)/binary/$(OBJ)
 
 compress_files: $(ODIR)/binary/$(OBJ)
 # Copi i file in dir
