@@ -5,7 +5,7 @@ OBJ=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk mount compile_binary compress_files copy_files remove_files umount copy_to_site
+make: create_folders create_disk compile_binary compress_files mount_disk copy_files remove_files umount_disk copy_to_site
 	echo "Done"
 
 create_folders:
@@ -43,10 +43,10 @@ remove_files: $(ODIR)/mnt/$(ARC_NAME)
 # Rimuovo i file da nascondere
 	sudo unlink $^
 
-mount: $(ODIR)/$(DISK_NAME)
+mount_disk: $(ODIR)/$(DISK_NAME)
 	sudo mount $(ODIR)/$(DISK_NAME) $(ODIR)/mnt
 
-umount:
+umount_disk:
 	sudo umount $(ODIR)/mnt 
 
 copy_to_site:
