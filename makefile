@@ -33,7 +33,7 @@ compress_files: $(ODIR)/binary/$(OBJ)
 	cp $^ $(ODIR)/archive/cache
 # Comprimo i file
 #	zip -j $(ODIR)/archive/$(ARC_NAME) $^
-  tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
+	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
 copy_files: filesystem/stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png
 # Copio i file
