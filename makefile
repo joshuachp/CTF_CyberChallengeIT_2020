@@ -22,7 +22,7 @@ create_disk:
 # Converto il file in un fylesystem ext2
 	mkfs -t ext2 $(ODIR)/$(DISK_NAME)
 
-compile_binary: binary/password.c
+compile_binary: binary/easy_password.c
 	$(CC) -o $(ODIR)/binary/$(OBJ) $(CFLAGS) $^
 
 compress_files: $(ODIR)/binary/$(OBJ)
@@ -32,7 +32,7 @@ compress_files: $(ODIR)/binary/$(OBJ)
 #	zip -j $(ODIR)/archive/$(ARC_NAME) $^
 	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
-copy_files: filesystem/stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png
+copy_files: filesystem/next_stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png filesystem/requirements.txt filesystem/decrypt.py
 # Copio i file
 	sudo cp $^ $(ODIR)/mnt
 
