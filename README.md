@@ -13,3 +13,5 @@ make clean && make
 #TODO:
   1. Aggiungere file "stage2" assieme al disk
   2. Aggiungere crack me nel disk
+  3. Aggiungere get_flag.py nel disco
+  
