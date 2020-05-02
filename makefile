@@ -37,7 +37,7 @@ compress_files: $(ODIR)/binary/$(OBJ2) filesystem/final_stage.txt
 #	zip -j $(ODIR)/archive/$(ARC_NAME) $^
 	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
-copy_files: filesystem/next_stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png filesystem/requirements.txt filesystem/decrypt.py
+copy_files: filesystem/next_stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png filesystem/requirements.txt ./filesystem/get_flag.pyc
 # Copio i file
 	sudo cp $^ $(ODIR)/mnt
 
