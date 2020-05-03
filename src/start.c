@@ -63,7 +63,7 @@ int main() {
     printf("\n--------------------------------\n");
     printf("Quello che dovrete affrontare è un viaggio che vi porterà diverse dimensioni...\n");
     printf("Il tutto inizia qui: %s\n", url_link);
-    printf("Attenti a non dimenticare niente, mi ricordo solo di aver usato admin com user!\n");
+    printf("Attenti a non dimenticare niente, mi ricordo solo di aver usato admin!\n");
     printf("See you soon!!\n");
     
     sleep(10);

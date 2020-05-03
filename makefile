@@ -1,11 +1,12 @@
 CC=gcc
 CFLAGS=-fno-stack-protector
 ODIR=build
-OBJ=crackme
+OBJ1=start
+OBJ2=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk compile_binary compress_files mount_disk copy_files remove_files umount_disk copy_to_site
+make: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk copy_to_site
 	echo "Done"
 
 create_folders:
@@ -22,17 +23,21 @@ create_disk:
 # Converto il file in un fylesystem ext2
 	mkfs -t ext2 $(ODIR)/$(DISK_NAME)
 
-compile_binary: binary/password.c
-	$(CC) -o $(ODIR)/binary/$(OBJ) $(CFLAGS) $^
 
-compress_files: $(ODIR)/binary/$(OBJ)
+compile_start: src/start.c
+	$(CC) -o $(ODIR)/binary/$(OBJ1) $(CFLAGS) $^
+
+compile_crackme: src/easy_password.c
+	$(CC) -o $(ODIR)/binary/$(OBJ2) $(CFLAGS) $^
+
+compress_files: $(ODIR)/binary/$(OBJ2) filesystem/final_stage.txt
 # Copi i file in dir
 	cp $^ $(ODIR)/archive/cache
 # Comprimo i file
 #	zip -j $(ODIR)/archive/$(ARC_NAME) $^
 	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
-copy_files: filesystem/stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png
+copy_files: filesystem/next_stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png filesystem/requirements.txt ./filesystem/get_flag.pyc
 # Copio i file
 	sudo cp $^ $(ODIR)/mnt
 

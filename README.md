@@ -12,6 +12,6 @@ make clean && make
 
 #TODO:
   1. Aggiungere file "stage2" assieme al disk
-  2. Aggiungere if sbagliato in "easy_password.c"
-  3. Aggiungere file "stage3" nel disk, assieme all'eseguibile "crackme" e "decript.py"
-  4. Caricare eseguibile "start"
+  2. Aggiungere crack me nel disk
+  3. Aggiungere get_flag.py nel disco
+  
