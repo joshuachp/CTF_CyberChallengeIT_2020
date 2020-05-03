@@ -200,7 +200,9 @@ int main(int argc, char** argv){
     uint32_t counter = modular_exponentiation(3, 43, 7); // Returns 3
     if (table[counter](v)){ // The solution is 3113377990
         printf("Ayy, that's pretty good! (Don't try to trick me, you won't get the real deal)\n");
-        printf("One last step.\nHere's yours the password: (SHA2)\n");
+        printf("One last step.\nYou'll get 128 bytes, the dump of a hexdigest (SHA2).\n");
+        printf("(For example, \"abcd\" will get you 0x61, 0x62, 0x63, 0x64 )\n");
+        printf("With the right key the bytes will be yours, you can patch me and do anything you want to me, everything's allowed!\n");
         process_data(secret, 128, v);
     }
     else{
