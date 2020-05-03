@@ -203,10 +203,6 @@ int main(int argc, char** argv){
     }
     uint32_t v = atoi(argv[1]);
     uint32_t counter = modular_exponentiation(3, 43, 7); // Returns 3
-
-    /*if (table[0]){ // Should be patched away!
-        counter = -1;
-    }*/
     
     if (table[counter](v)){ // The solution is 3113377990
         printf("Ayy, that's pretty good! (Don't try to trick me, you won't get the real deal)\n");
