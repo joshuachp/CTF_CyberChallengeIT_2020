@@ -10,8 +10,7 @@ const disk = "data:application/octet-stream;charset=utf-8;base64,";
 let DB;
 let click = 0;
 
-$(document).ready(async function setup() {
-    setTimeout(function() {while (true) {eval("debugger")}})
+async function setup() {
     const SQL = await initSqlJs();
 
     DB = new SQL.Database();
@@ -23,7 +22,7 @@ $(document).ready(async function setup() {
     $("#login-form").submit(loginSubmit);
 
     $("#forgot-password").click(forgotPassword);
-});
+}
 
 function loginSubmit(event) {
     event.preventDefault();
@@ -75,3 +74,5 @@ function forgotPassword(_event) {
     click++;
     return false;
 }
+
+setup().catch((err) => console.error(err));

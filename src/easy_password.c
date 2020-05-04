@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define INT_AMOUNT 4
 #define PRIME (((uint32_t) 1 << 31) - 1)
@@ -9,25 +10,36 @@ typedef struct {
     uint32_t numbers[INT_AMOUNT];
 } vector;
 
-const uint8_t secret[] = {0x26,0xEC,0x97,0x59,0x1D,0xC3,0x8D,0xE4,0x77,0x69,0xB7,0xA0,0x6F,0x17,0x8F,0xD2,0x10,0x5E,0x37,0xF1,0xB7,0x6D,0x2B,0x84,0x9F,0x5D,0x04,0xCD,0xDA,0xBC,0x72,0x75,0xB5,0xA4,0x01,0x1A,0xD6,0xD7,0x4F,0x71,0x67,0xAE,0xA1,0x6F,0x2C,0xD2,0x92,0x11,0x06,0xCD,0xA6,0xED,0x7D,0x2C,0xEC,0xC4,0x56,0x1C,0x93,0xDD,0x46,0x73,0x39,0xB1,0xF3,0x6F,0x16,0xD8,0x9B,0x45,0x5E,0x37,0xF2,0xEF,0x37,0x7D,0xB8,0x96,0x0F,0x04,0xC3,0x8B,0xE3,0x2A,0x3C,0xB0,0xAA,0x56,0x44,0x8A,0x80,0x40,0x0D,0x66,0xAF,0xF5,0x6E,0x2B,0x86,0x98,0x0F,0x06,0xCA,0xF9,0xB4,0x78,0x20,0xBA,0xAE,0x54,0x1E,0x94,0xD5,0x4E,0x75,0x30,0xF7,0xA6,0x3E,0x41,0xD0,0xC8,0x10,0x09,0x9F,0xA1,0xBB,0x33};
-void encrypt(const char* data, uint32_t key){
-    uint32_t s = 1337;
-    for(uint32_t i = 0; data[i] != 0; i++){
-        uint8_t c = (s * key) & 0xFF;
-        printf("0x%02X,", data[i] ^ c);
-        s++;
+typedef union {
+    uint8_t bytes[4];
+    uint32_t number;
+} rng_helper;
+
+uint32_t rand_gen(uint32_t* state){
+    rng_helper* s = (rng_helper*)state;
+    const uint8_t random_permutation[256] = {121, 54, 58, 207, 95, 198, 231, 228, 218, 254, 203, 88, 200, 28, 50, 190, 147, 110, 237, 4, 184, 59, 197, 116, 139, 178, 68, 112, 57, 12, 115, 42, 153, 107, 210, 236, 124, 181, 84, 192, 143, 179, 113, 90, 150, 162, 219, 86, 37, 99, 187, 145, 16, 255, 29, 33, 130, 204, 227, 97, 62, 217, 149, 31, 40, 34, 15, 41, 208, 156, 64, 35, 146, 7, 154, 209, 10, 232, 71, 137, 133, 225, 205, 148, 164, 132, 224, 51, 79, 101, 65, 131, 92, 17, 189, 195, 89, 136, 125, 253, 47, 213, 46, 81, 222, 70, 21, 158, 85, 22, 100, 60, 3, 117, 93, 123, 151, 170, 8, 48, 199, 241, 134, 230, 239, 216, 91, 56, 36, 221, 196, 18, 24, 83, 43, 32, 171, 163, 191, 11, 180, 248, 26, 73, 250, 211, 104, 183, 98, 96, 201, 144, 235, 249, 166, 27, 72, 206, 193, 44, 127, 160, 108, 103, 129, 9, 251, 243, 155, 55, 159, 39, 168, 240, 105, 78, 194, 161, 75, 202, 173, 13, 238, 185, 45, 74, 244, 118, 152, 82, 14, 229, 169, 30, 87, 141, 226, 102, 128, 6, 135, 233, 52, 177, 25, 1, 174, 119, 49, 223, 247, 19, 106, 157, 67, 61, 212, 2, 246, 188, 122, 172, 175, 69, 80, 120, 167, 20, 252, 109, 94, 23, 77, 38, 234, 214, 126, 220, 245, 176, 182, 138, 114, 111, 215, 53, 0, 5, 186, 76, 66, 63, 142, 140, 242, 165};
+    for (size_t i = 0; i < 1024; i++){
+        s->number ^= (s->number << 7);
+        s->number ^= 0xf0131b13;
+        for(size_t j = 0; j < 4; j++) s->bytes[j] = random_permutation[s->bytes[j]];
     }
+    rng_helper n = (*s);
+    for (size_t i = 0; i < 1024; i++){
+        n.number += 0x3df920b9;
+        n.number ^= n.number << 3;
+        for(size_t j = 0; j < 4; j++) n.bytes[j] = random_permutation[n.bytes[j]];
+    }
+    return n.number;
 }
 
-void decrypt(const uint8_t* data, uint32_t len, uint32_t key){
-    uint32_t s = 1337;
-    for(uint32_t i = 0; i < len; i++){
-        uint8_t c = (s * key) & 0xFF;
-        printf("%c", data[i] ^ c);
-        s++;
-    }
+void process_data(const uint8_t* data, size_t len, uint32_t key){
+    for(size_t i = 0; i < len; i++)
+        printf("0x%02X, ", data[i] ^ (uint8_t) rand_gen(&key));
     printf("\n");
 }
+
+const uint8_t secret[] = {0xB4, 0x44, 0xA0, 0xB4, 0x31, 0xF0, 0x13, 0x0C, 0x76, 0xC8, 0xE0, 0x62, 0xF7, 0x98, 0xC5, 0x29, 0x1B, 0x33, 0xFA, 0x94, 0x4A, 0x79, 0x3D, 0xD8, 0x2E, 0xA9, 0xCB, 0x80, 0xFF, 0xF2, 0x0E, 0xE6, 0x00, 0x07, 0xB1, 0x6E, 0x25, 0x43, 0x87, 0xD7, 0x6A, 0x22, 0xAD, 0x99, 0x28, 0xB4, 0xB7, 0x28, 0x94, 0xCF, 0xD4, 0x37, 0x87, 0xBE, 0xED, 0xE5, 0xDE, 0x9A, 0xA1, 0x1B, 0xA7, 0xF6, 0xD2, 0x6F, 0x15, 0x45, 0xEB, 0x26, 0x4E, 0x63, 0xFD, 0x50, 0x72, 0x9E, 0x43, 0x97, 0xDC, 0x11, 0x71, 0x0E, 0xC9, 0x8F, 0x42, 0x17, 0x4D, 0x29, 0x01, 0x01, 0x92, 0x53, 0x56, 0xBF, 0x28, 0x81, 0x92, 0xE3, 0x9F, 0x2F, 0xB4, 0xD9, 0xE9, 0x6B, 0x5C, 0x85, 0xF7, 0x28, 0xBB, 0xDB, 0xD2, 0x7F, 0xFC, 0x9A, 0x53, 0xD7, 0x0A, 0xED, 0x1B, 0xC3, 0xBE, 0x49, 0xD5, 0xD3, 0xA9, 0x59, 0xDA, 0x77, 0xDC, 0x83, 0x39};
+
 
 uint32_t modular_exponentiation(uint32_t x, uint32_t y, uint32_t p);
 uint32_t first_check(uint32_t n);
@@ -175,19 +187,28 @@ int main(int argc, char** argv){
         return 0;
     }
     uint32_t v = atoi(argv[1]);
-    uint32_t counter = modular_exponentiation(3, 43, 7); // Returns 3
-
-    if (table[0]){ // Should be patched away!
-        counter = -1;
-    }
     
+    #ifdef IS_DEBUG // Activate me from the compiler
+    char buf[1024] = {0};
+    printf("Write the passsword to encrypt (max 1024 chars): ");
+    fgets(buf, 1024, stdin);
+    size_t len = strlen(buf);
+    process_data((uint8_t*)buf, len, v);
+    #endif
+
+    #ifndef IS_DEBUG
+    uint32_t counter = modular_exponentiation(3, 43, 7); // Returns 3
     if (table[counter](v)){ // The solution is 3113377990
         printf("Ayy, that's pretty good! (Don't try to trick me, you won't get the real deal)\n");
-        printf("One last step.\nHere's yours the password: (SHA2)\n");
-        decrypt(secret, 128, v);
+        printf("One last step.\nYou'll get 128 bytes, the dump of a hexdigest (SHA2).\n");
+        printf("(For example, \"abcd\" will get you 0x61, 0x62, 0x63, 0x64 )\n");
+        printf("With the right key the bytes will be yours, you can patch me and do anything you want to me, everything's allowed!\n");
+        process_data(secret, 128, v);
     }
     else{
         printf("lol no x2\n");
     }
+    #endif
     return 0;
+    
 }
