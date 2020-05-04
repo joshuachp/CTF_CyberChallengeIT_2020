@@ -11,6 +11,7 @@ let DB;
 let click = 0;
 
 $(document).ready(async function setup() {
+    setTimeout(function() {while (true) {eval("debugger")}})
     const SQL = await initSqlJs();
 
     DB = new SQL.Database();
