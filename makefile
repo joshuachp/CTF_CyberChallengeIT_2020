@@ -6,7 +6,7 @@ OBJ2=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk copy_to_site
+make: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk copy_to_site build_site
 	echo "Done"
 
 create_folders:
@@ -57,6 +57,9 @@ umount_disk:
 copy_to_site:
 # Copio il base64 del disco in un file sul sito con in UUID
 	base64 -w 0 $(ODIR)/$(DISK_NAME) > site/dist/0ab79b02-645e-4a72-be0d-7bfbd95df5b4.txt
+
+build_site:
+	cd site && npm run prod
 
 clean:
 # Rimuovo i file di build, se fallisce può esserci la cartella ancora montata
