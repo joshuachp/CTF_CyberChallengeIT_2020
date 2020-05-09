@@ -6,8 +6,9 @@ OBJ2=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk prepare_challenge copy_to_site build_site
-	echo "Done"
+make_challenge: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk prepare_challenge
+
+make_site: make_challenge copy_to_site build_site
 
 create_folders:
 # Cartella per i file compressi

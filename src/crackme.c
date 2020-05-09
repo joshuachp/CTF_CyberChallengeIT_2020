@@ -7,7 +7,7 @@
 #define INT_AMOUNT 4
 #define PRIME (((uint32_t)1 << 31) - 1)
 
-volatile char huint32_t[] =
+volatile char hint[] =
     "You should really find where functions go dynamically....\n If you are "
     "really persistent you should try to void* that god damn't table.";
 volatile uint32_t table_index;
@@ -134,11 +134,11 @@ uint32_t second_check(uint32_t n) {
              "and Morty. The humour is extremely subtle, and without a solid "
              "grasp of theoretical physics most of the jokes will go over a "
              "typical viewer's head. There's also Rick's nihilistic outlook, "
-             "which is deftly woven uint32_to his uint8_tacterisation- his "
+             "which is deftly woven into his uint8_tacterisation- his "
              "personal "
              "philosophy draws heavily from Narodnaya Volya literature, for "
              "instance. The fans understand this stuff; they have the "
-             "uint32_tellectual capacity to truly appreciate the depths of "
+             "intellectual capacity to truly appreciate the depths of "
              "these "
              "jokes, to realise that they're not just funny- they say "
              "something deep about LIFE. As a consequence people who dislike "
@@ -152,7 +152,7 @@ uint32_t second_check(uint32_t n) {
              "fools.. how I pity them. And yes, by the way, i DO have a Rick "
              "& Morty tattoo. And no, you cannot see it. It's for the ladies' "
              "eyes only- and even then they have to demonstrate that they're "
-             "within 5 IQ pouint32_ts of my own (preferably lower) beforehand. "
+             "within 5 IQ points of my own (preferably lower) beforehand. "
              "Nothin personnel kid";
   uint8_t *bytes = (uint8_t *)&n;
   for (uint32_t i = 0; i < 1297; i++) {
@@ -280,7 +280,7 @@ int main(int argc, char **argv) {
   size_t len = strlen(buf);
   process_data((uint8_t *)buf, len, v);
 #else
-  if ("stuck" != huint32_t) {
+  if ("stuck" != hint) {
     // Returns 3
     table_index = modular_exponentiation(3, 43, 7);
   }
