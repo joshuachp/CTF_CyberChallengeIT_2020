@@ -27,7 +27,7 @@ create_disk:
 compile_start: src/start.c
 	$(CC) -o $(ODIR)/binary/$(OBJ1) $(CFLAGS) $^
 
-compile_crackme: src/easy_password.c
+compile_crackme: src/crackme.c
 	$(CC) -o $(ODIR)/binary/$(OBJ2) $(CFLAGS) $^
 
 compress_files: $(ODIR)/binary/$(OBJ2) filesystem/final_stage.txt
@@ -37,7 +37,7 @@ compress_files: $(ODIR)/binary/$(OBJ2) filesystem/final_stage.txt
 #	zip -j $(ODIR)/archive/$(ARC_NAME) $^
 	tar -czf $(ODIR)/archive/$(ARC_NAME) -C $(ODIR)/archive/cache .
 
-copy_files: filesystem/next_stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png filesystem/requirements.txt ./filesystem/get_flag.pyc
+copy_files: filesystem/next_stage.txt  $(ODIR)/archive/$(ARC_NAME) filesystem/helpful.png
 # Copio i file
 	sudo cp $^ $(ODIR)/mnt
 
