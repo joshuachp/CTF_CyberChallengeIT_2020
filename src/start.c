@@ -1,11 +1,11 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <limits.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #define A "Ehi Ciao!\0"
 #define B "Scusami il disturbo\0"
@@ -18,57 +18,65 @@
 #define I "Sei pronto?\0"
 #define J "E allora let's go!\0"
 
-char* msg[] = {A, B, C, D, E, F, G, H, I, J};
-char* url_link = "https://joshuachp.github.io/CTF/CCIT_challenge/\0";
+char *msg[] = {A, B, C, D, E, F, G, H, I, J};
+char *url_link = "https://joshuachp.github.io/CTF/CCIT_challenge/\0";
 
 int main() {
-    printf(" #####  ####### #######\n"); 
-    printf("#     #    #    #\n");
-    printf("#          #    #\n");       
-    printf("#          #    #####\n");   
-    printf("#          #    #\n");       
-    printf("#     #    #    #\n");       
-    printf(" #####     #    #\n"); 
+  printf(" #####  ####### #######\n");
+  printf("#     #    #    #\n");
+  printf("#          #    #\n");
+  printf("#          #    #####\n");
+  printf("#          #    #\n");
+  printf("#     #    #    #\n");
+  printf(" #####     #    #\n");
 
-    printf("\n\nBenvenuto alla nostra challenge!");
-    printf("\nInizializzando alcune cose prima dell'inizio!");
-    
-    printf("\n-------- Starting --------");
+  printf("\n\nBenvenuto alla nostra challenge!");
+  printf("\nInizializzando alcune cose prima dell'inizio!");
 
-    printf("\n||");
-    for(int i=1;i<=10;i++) {
-        printf("*****");
-        fflush(stdout);
-        sleep(1);
-    }
-    printf("\n");
+  printf("\n-------- Starting --------");
 
-    char* msg[] = {A, B, C, D, E, F, G, H, I, J};
-    for(int i=0; i<10; i++) {
+  printf("\n||");
+  for (int i = 1; i <= 10; i++) {
+    printf("*****");
+    fflush(stdout);
+    sleep(1);
+  }
+  printf("\n");
 
-        int child_pid = fork();
-        if(child_pid == -1) {
-            exit(1);
-        }
+  char *msg[] = {A, B, C, D, E, F, G, H, I, J};
+  for (int i = 0; i < 10; i++) {
 
-        if(child_pid == 0) {
-            execlp("xterm", "xterm", NULL);
-            exit(1);
-        }
-
-        printf("%s\n", *(msg+i));
-        sleep(2);
+    int child_pid = fork();
+    if (child_pid == -1) {
+      exit(1);
     }
 
-    printf("\n--------------------------------\n");
-    printf("Quello che dovrete affrontare è un viaggio che vi porterà diverse dimensioni...\n");
-    printf("Il tutto inizia qui: %s\n", url_link);
-    printf("Attenti a non dimenticare niente, mi ricordo solo di aver usato admin!\n");
-    printf("See you soon!!\n");
-    
-    sleep(10);
-    printf("\n\nDai non sono cosi cattivo... adesso li chiudo i terminali ...\n");
-    system("pkill bash");
+    if (child_pid == 0) {
+      char *term = getenv("TERM");
+      if (term == NULL) {
+        term = getenv("TERMINAL");
+        if (term == NULL)
+          term = "xterm";
+      }
+      execlp(term, term, NULL);
+      exit(1);
+    }
 
-    return 0;
+    printf("%s\n", *(msg + i));
+    sleep(2);
+  }
+
+  printf("\n--------------------------------\n");
+  printf("Quello che dovrete affrontare è un viaggio che vi porterà diverse "
+         "dimensioni...\n");
+  printf("Il tutto inizia qui: %s\n", url_link);
+  printf("Attenti a non dimenticare niente, mi ricordo solo di aver usato "
+         "admin!\n");
+  printf("See you soon!!\n");
+
+  sleep(10);
+  printf("\n\nDai non sono cosi cattivo... adesso li chiudo i terminali ...\n");
+  system("pkill bash");
+
+  return 0;
 }
