@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 """
   uint32_t a = n & 0xFF;
@@ -28,6 +29,8 @@ risultato = np.linalg.solve(incognite, valori)
 print("Values are: {}".format(risultato))
 
 
-binary = ["{0:08b}".format(int(b)) for b in risultato]
-binary.reverse()
-print(int("".join(binary), 2))
+values = [198, 96, 146, 185]
+values.reverse()
+
+binary = ["{0:08b}".format(b) for b in values]
+print("Value: {}".format(int("".join(binary), 2)))
