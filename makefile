@@ -55,7 +55,7 @@ mount_disk: $(ODIR)/$(DISK_NAME)
 umount_disk:
 	sudo umount $(ODIR)/mnt 
 
-prepare_challenge: stages/stage1.txt src/get_flag.py requirements.txt
+prepare_challenge: stages/stage1.txt src/get_flag.py requirements.txt $(ODIR)/binary/start
 	zip -j $(ODIR)/challenge_gruppo_1.zip $^
 
 copy_to_site:
