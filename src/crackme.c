@@ -10,7 +10,6 @@
 volatile char hint[] =
     "You should really find where functions go dynamically....\n If you are "
     "really persistent you should try to void* that god damn't table.";
-volatile char stuck[] = "Stuck";
 volatile uint32_t table_index;
 
 typedef union {
@@ -282,7 +281,7 @@ int main(int argc, char **argv) {
   size_t len = strlen(buf);
   process_data((uint8_t *)buf, len, v);
 #else
-  if (stuck != hint) {
+  if ("stuck" != hint) {
     // Returns 3
     table_index = modular_exponentiation(3, 43, 7);
   }
