@@ -70,7 +70,7 @@ int main() {
   printf("Quello che dovrete affrontare è un viaggio che vi porterà diverse "
          "dimensioni...\n");
   printf("Il tutto inizia qui: %s\n", url_link);
-  printf("Attenti a non dimenticare niente, mi ricordo solo di aver usato "
+  printf("Attenti a non dimenticare niente, mi ricordo solo di aver usato l'utente"
          "admin!\n");
   printf("See you soon!!\n");
 
