@@ -6,7 +6,7 @@ OBJ2=crackme
 DISK_NAME=disk
 ARC_NAME=sneaky.tar.gz
 
-make: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk copy_to_site build_site
+make: create_folders create_disk compile_start compile_crackme compress_files mount_disk copy_files remove_files umount_disk prepare_challenge copy_to_site build_site
 	echo "Done"
 
 create_folders:
@@ -53,6 +53,9 @@ mount_disk: $(ODIR)/$(DISK_NAME)
 
 umount_disk:
 	sudo umount $(ODIR)/mnt 
+
+prepare_challenge: stages/stage1.txt src/get_flag.py requirements.txt
+	zip -j $(ODIR)/challenge_gruppo_1.zip $^
 
 copy_to_site:
 # Copio il base64 del disco in un file sul sito con in UUID
