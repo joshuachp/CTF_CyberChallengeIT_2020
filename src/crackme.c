@@ -10,6 +10,7 @@
 volatile char hint[] =
     "You should really find where functions go dynamically....\n If you are "
     "really persistent you should try to void* that god damn't table.";
+volatile char stuck[] = "Stuck";
 volatile uint32_t table_index;
 
 typedef union {
@@ -77,7 +78,7 @@ uint32_t modular_exponentiation(uint32_t x, uint32_t y, uint32_t p);
 uint32_t first_check(uint32_t n);
 uint32_t second_check(uint32_t n);
 uint32_t third_check(uint32_t n);
-uint32_t *fourth_check(uint32_t n);
+uint32_t *fourth_check(uint32_t n, uint32_t ret[4]);
 uint32_t fifth_check(uint32_t n);
 uint32_t sixth_check(uint32_t n);
 uint32_t seventh_check(uint32_t n);
@@ -95,14 +96,15 @@ bool i(uint32_t n) {
   return k == 0x668568f4;
 }
 bool j(uint32_t n) { // 3113377990 Is the solution
-  uint32_t *k = fourth_check(n);
   /*for (uint32_t i = 0; i < 4; i++){
       printf("%d - ", k.numbers[i]);
   }
   printf("\n");*/
+  uint32_t ret[] = {0, 0, 0, 0};
+  fourth_check(n, ret);
   uint32_t vals[4] = {61319, 38111, 48787, 48939};
   for (uint32_t i = 0; i < 4; i++) {
-    if (vals[i] != k[i]) {
+    if (vals[i] != ret[i]) {
       return false;
     }
   }
@@ -194,9 +196,10 @@ uint32_t third_check(uint32_t n) { // Maybe too computation uint32_tensive, will
   }
   return n;
 }
+// This will be the equivalent of finding a
+// solution to a 4x4 linear system
+uint32_t *fourth_check(uint32_t n, uint32_t ret[4]) {
 
-uint32_t *fourth_check(uint32_t n) { // This will be the equivalent of finding a
-                                     // solution to a 4x4 linear system
   uint32_t a = n & 0xFF;
   uint32_t b = (n >> 8) & 0xFF;
   uint32_t c = (n >> 16) & 0xFF;
@@ -207,13 +210,12 @@ uint32_t *fourth_check(uint32_t n) { // This will be the equivalent of finding a
   uint32_t v3 = 'Z' * a + 'A' * b + 'W' * c + 'A' * d;
   uint32_t v4 = 'R' * a + 'U' * b + 'D' * c + 'O' * d;
 
-  uint32_t *res = (uint32_t *)malloc(sizeof(uint32_t) * INT_AMOUNT);
-  res[0] = v1;
-  res[1] = v2;
-  res[2] = v3;
-  res[3] = v4;
+  ret[0] = v1;
+  ret[1] = v2;
+  ret[2] = v3;
+  ret[3] = v4;
 
-  return res;
+  return ret;
 }
 
 uint32_t fifth_check(uint32_t n) { // Optional
@@ -280,7 +282,7 @@ int main(int argc, char **argv) {
   size_t len = strlen(buf);
   process_data((uint8_t *)buf, len, v);
 #else
-  if ("stuck" != hint) {
+  if (stuck != hint) {
     // Returns 3
     table_index = modular_exponentiation(3, 43, 7);
   }
