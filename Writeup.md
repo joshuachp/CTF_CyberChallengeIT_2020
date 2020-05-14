@@ -16,7 +16,7 @@
       - [Reverse Engineering](#reverse-engineering)
     - [Stenography](#stenography)
     - [Cracking](#cracking)
-    - [Conclusione](#conclusione)
+  - [Conclusione](#conclusione)
 
 <!-- markdown-toc end -->
 
@@ -224,7 +224,7 @@ hashcat -a 0 -m 1700 hash rockyou.txt
 # Mr.Pickles
 ```
 
-### Conclusione
+## Conclusione
 
 Eseguiamo il file python per ottenere la flag
 
