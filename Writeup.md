@@ -1,5 +1,25 @@
 # Write-Up gruppo 1
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+
+**Table of Contents**
+
+- [Write-Up gruppo 1](#write-up-gruppo-1)
+  - [Start](#start)
+  - [Sito](#sito)
+    - [Hint 1](#hint-1)
+  - [Disk](#disk)
+    - [Hint 2](#hint-2)
+    - [Forensics](#forensics)
+    - [Crackme](#crackme)
+      - [Hint 3](#hint-3)
+      - [Reverse Engineering](#reverse-engineering)
+    - [Stenography](#stenography)
+    - [Cracking](#cracking)
+    - [Conclusione](#conclusione)
+
+<!-- markdown-toc end -->
+
 La challenge inizia con uno zip con all'interno un file di testo e un eseguibile.
 
 ## Start
@@ -209,4 +229,3 @@ hashcat -a 0 -m 1700 hash rockyou.txt
 Eseguiamo il file python per ottenere la flag
 
 `FLAG{i_7urn3d_mys31f_i1n70_4_pick13}`
-
