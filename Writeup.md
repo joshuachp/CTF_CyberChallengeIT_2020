@@ -7,9 +7,8 @@
   - [Disk](#disk)
     - [Hint 2](#hint-2)
     - [Forensics](#forensics)
-    - [Crackme](#crackme)
+    - [Reverse Engineering](#crackme)
       - [Hint 3](#hint-3)
-      - [Reverse Engineering](#reverse-engineering)
     - [Stenography](#stenography)
     - [Cracking](#cracking)
   - [Conclusione](#conclusione)
@@ -100,17 +99,7 @@ Il tar contiene i seguenti files:
 - **final_stage.txt** : testo
 - **crackme** : eseguibile
 
-### Crackme
-
-#### Hint 3
-
-Nell'eseguibile viene eseguito un controllo tra la stringa "stuck" e una
-variabile di nome `hint`. Se andiamo a controllare il valore della variabile,
-ci consiglia di trovare dinamicamente la funzione chiamata dal main o di
-cambiare il tipo della variabile `table` in un array di funzioni per capire
-quale di queste chiami.
-
-#### Reverse Engineering
+### Reverse Engineering
 
 Analizziamo crack me troviamo che dal main viene chiamato una funzione da un
 array di funzioni nominato `table`. La funzione chiamata è la funzione `j` che
@@ -169,6 +158,14 @@ Passando questo valore al crackme otteniamo un Hash.
 ./crackme 3113377990
 # 0051377D1EE813EBFB59991D9165D88EC8C28C51AB37268A01DE386D00AE873AE34051D74CEEF2E457AB2D06BF283BEE87D0A209242B004DC27892DA6DB1AE1C
 ```
+
+#### Hint 3
+
+Nell'eseguibile viene eseguito un controllo tra la stringa "stuck" e una
+variabile di nome `hint`. Se andiamo a controllare il valore della variabile,
+ci consiglia di trovare dinamicamente la funzione chiamata dal main o di
+cambiare il tipo della variabile `table` in un array di funzioni per capire
+quale di queste chiami.
 
 ### Stenography
 
