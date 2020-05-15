@@ -1,9 +1,5 @@
 # Write-Up gruppo 1
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-
-**Table of Contents**
-
 - [Write-Up gruppo 1](#write-up-gruppo-1)
   - [Start](#start)
   - [Sito](#sito)
@@ -17,8 +13,6 @@
     - [Stenography](#stenography)
     - [Cracking](#cracking)
   - [Conclusione](#conclusione)
-
-<!-- markdown-toc end -->
 
 La challenge inizia con uno zip con all'interno un file di testo e un eseguibile.
 
@@ -206,7 +200,7 @@ for x in range(0,image.width):
 
 chars = []
 for i in range(len(extracted)//8):
-    byte = extracted[i*8:(i+1)*8]
+    byte = extracted[(i*8):(i+1)*8]
     chars.append(chr(int(''.join([str(bit) for bit in byte]), 2)))
 
 # Don't forget that the message was base64-encoded
