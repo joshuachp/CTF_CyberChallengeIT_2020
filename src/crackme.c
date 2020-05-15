@@ -288,8 +288,8 @@ int main(int argc, char **argv) {
   // The solution is 3113377990
   if (table[table_index](v)) {
     puts(" Ayy, that's pretty good! (Don't try to trick me, you won't get the "
-         "real deal)\n One last step.\n You'll get 128 bytes, the dump of a "
-         "hex-digest (SHA2).\n It's dangerous to go alone. Take this clip if "
+         "real deal)\n One last step.\n You'll get th hash of the password to "
+         "access the flag (SHA2).\n It's dangerous to go alone. Take this CLIP if "
          "you're stuck it can help.\n I hope somebody was looking at that or "
          "not, just use the force.");
     process_data(secret, 128, v);

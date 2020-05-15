@@ -9,7 +9,7 @@
     - [Forensics](#forensics)
     - [Reverse Engineering](#crackme)
       - [Hint 3](#hint-3)
-    - [Stenography](#stenography)
+    - [Steganography](#stenography)
     - [Cracking](#cracking)
   - [Conclusione](#conclusione)
 
@@ -85,7 +85,7 @@ l'estrazione e l'analisi dei files.
 
 ```bash
 binwalk -e -b disk
-file \*
+file *
 ```
 
 Notiamo la presenza di un archivio tar e proseguiamo ad estrarlo
@@ -167,7 +167,7 @@ ci consiglia di trovare dinamicamente la funzione chiamata dal main o di
 cambiare il tipo della variabile `table` in un array di funzioni per capire
 quale di queste chiami.
 
-### Stenography
+### Steganography
 
 Torniamo a considerare un attimo l'immagine `helpful.png`
 
