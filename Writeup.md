@@ -11,13 +11,28 @@
       - [Hint 3](#hint-3)
     - [Steganography](#stenography)
     - [Cracking](#cracking)
+      - [Hint 4](#hint-4)
   - [Conclusione](#conclusione)
-
-La challenge inizia con uno zip con all'interno un file di testo e un eseguibile.
+  - [Extra](#extras)
+    - [ForgetPassword](#forgetpassword)
+    - [CopyPasta](#copypasta)
+    - [HelloThere](#hellothere)
 
 ## Start
 
-Osserviamo lo start fare cose (LOL). Alla fine ci indirizza ad un [sito web](https://joshuachp.github.io/CTF/CCIT_challenge/).
+La challenge inizia con uno zip.
+
+```bash
+unzip challenge_gruppo_1.zip
+```
+
+All'interno dello zip troviamo diversi file:
+- **get_flag.py** : script python che una volta fornita la password corretta stampa la flag
+- **start** : eseguibile per l'inizio della challenge
+- **stage1.txt** : file di benvenuto
+
+Osserviamo lo start fare cose (LOL).
+Alla fine ci indirizza ad un [sito web](https://joshuachp.github.io/CTF/CCIT_challenge/).
 
 ## Sito
 
@@ -25,21 +40,21 @@ Accediamo al sito e troviamo che il campo username è vulnerabile a SQLI ber il
 bypass dell'autenticazione.
 
 ```sql
-admin' or '1'='1 --
+admin' or '1'='1
 ```
 
 Questo ci permette di scaricare un file `disk`.
 
 ### Hint 1
 
-Nel source del sito possiamo trovare un commento che indica a SQL Injection.
+Nel source del sito possiamo trovare un commento suggerisce di utilizzare SQL Injection.
 
 ## Disk
 
 Utilizzando il comando `file` su disk possiamo vedere:
 
 ```bash
-disk: Linux rev 1.0 ext2 filesystem data,...
+disk: Linux rev 1.0 ext2 filesystem data, ...
 ```
 
 Essendo un file-system procediamo quindi a creare una cartella dove eseguire il mount
@@ -51,17 +66,20 @@ sudo mount disk mnt
 
 Nella cartella `mnt` troviamo i seguenti file:
 
-- **next_stage.txt** : un testo che come all'inizio ci indica la strada da
-  proseguire, contiene un indizio.
-- **helpful.png** : Una immagine che ci servirà in seguito ma visto che siamo in
-  gruppi di 4 qualcuno può lavorarci in quanto non servono tutte le persone su
-  un singolo aspetto della challenge.
+- **next_stage.txt** : un testo che come all'inizio ci indica la strada da proseguire.
+- **helpful.png** : immagine con Clippy che ci lascia un messaggio
 
 ### Hint 2
 
-Analizzando il file `next_stage.txt` notiamo una stringa in base64 e proseguiamo
-ad analizzarla notando che è stato applicato un ROT13 otteniamo quindi il
-messaggio originale.
+Clippy nel suo messaggio cita un eseguibile di cui fare il reverse engineering, però non abbiamo al momento nessun eseguibile.
+Analizziamo quindi il contenuto del file `next_stage.txt`
+
+```bash
+strings next_stage.txt
+strings -10 next_stage.txt
+```
+
+Notiamo una stringa in base64, decodificata proseguiamo ad analizzarla notando che è stato applicato uno shift
 
 ```bash
 echo "RnIgZnJ2IG95YnBwbmdiIHZhIGdoZ2d2IGRocmZndiBPVkEgY2ViaW4gbiBzbmVndiBoYW4gSk5ZWCA6KQo=" | base64 -d | tr ‘n-za-mN-ZA-M’ ‘a-zA-Z’
@@ -69,28 +87,30 @@ echo "RnIgZnJ2IG95YnBwbmdiIHZhIGdoZ2d2IGRocmZndiBPVkEgY2ViaW4gbiBzbmVndiBoYW4gSk
 echo "RnIgZnJ2IG95YnBwbmdiIHZhIGdoZ2d2IGRocmZndiBPVkEgY2ViaW4gbiBzbmVndiBoYW4gSk5ZWCA6KQo=" | base64 -d | rot13
 ```
 
-Il suggerimento ci dice che un file è stato eliminato e ci consiglia di
-utilizzare `binwalk`.
+Unendo le varie informazioni trovate sappiamo che sono stati eliminati dei file e ci viene citato `binwalk`.
 
 ### Forensics
 
-Il file system mantiene in scritti su disco i dati di un file anche dopo
-l'eliminazione. Per estrarre i dati ci sono vari modi: testdisk, ext-undelete,
-scalpel... Noi mostreremo un metodo utilizzando binwalk.
+Il filesystem mantiene i dati scritti su disco anche dopo l'eliminazione dato che vengono solo eliminati i nodi e considerato come freespace.
+Per estrarre i dati ci sono vari modi: testdisk, ext-undelete, scalpel... Noi mostreremo un metodo utilizzando binwalk.
 
-Come suggerito proviamo a utilizzare binwalk su disk per trovare tutti i dati
-contenuti, nelle nuove versioni è necessario utilizzare il tag `-b`. Una volta
-visto l'esistenza di un file non presente alla montatura procediamo con
-l'estrazione e l'analisi dei files.
+Come suggerito proviamo a utilizzare binwalk su disk per trovare tutti i dati contenuti, nelle nuove versioni è necessario utilizzare il tag `-b`.
+
+Facendo un prima analisi sul file disk possiamo notare che contiene file di estensione nota e che quando abbiamo fatto il mount non erano presenti
+
+```bash
+strings -10 disk | grep -i "[a-z_]*\.[a-z]*"
+#next_stage.txt
+#sneaky.tar.gz
+#helpful.png
+```
+
+Una volta visto l'esistenza di un file non presente alla montatura procediamo con l'estrazione e l'analisi dei files utilizzando binwalk con la flag `-e`.
 
 ```bash
 binwalk -e -b disk
+cd _disk.extracted/
 file *
-```
-
-Notiamo la presenza di un archivio tar e proseguiamo ad estrarlo
-
-```bash
 tar -xvf 7400
 ```
 
@@ -101,23 +121,26 @@ Il tar contiene i seguenti files:
 
 ### Reverse Engineering
 
-Analizziamo crack me troviamo che dal main viene chiamato una funzione da un
-array di funzioni nominato `table`. La funzione chiamata è la funzione `j` che
-al suo interno chiama una funzione di controllo (`fourth_check`) sul valore che
-abbaiamo inserito come argomento del binary.
+Analizzando crackme troviamo che dal main viene chiamata una funzione da un array di funzioni nominato `table`.
+La funzione chiamata è la funzione `j`, dato che viene l'indice viene determinato dal calcolo di `modular_exponentiation` sulla base di parametri statici.
 
-Il `fourth_check` divide il valore che abbiamo inserito in 4 parti che utilizza
-in un sistema lineare a quattro incognite. La funzione `j` controllerà poi il
-risultati di questo sistema. Conoscendo tutti questi valori possiamo quindi
-impostare un sistema a impostando come incognite le quattro parti in cui il
-nostro valore di ingresso è stato diviso, possiamo poi risolvere questo sistema
-in python.
+```C++
+argv_to_int = atoi(*(char **)(param_2 + 8));
+table_index = modular_exponentiation(3,0x2b,7);
+cVar1 = *(table + (ulong)table_index * 8)((ulong)argv_to_int);
+```
+
+Proseguendo l'analisi della funzione `j` notiamo che al suo interno chiama una funzione di controllo (`fourth_check`) passando come argomento del binary.
+`fourth_check` divide il valore che abbiamo inserito in 4 variabili tramite operazioni binarie che utilizza poi in un sistema lineare a quattro incognite.
+La funzione `j` controllerà poi i risultati di questo sistema con i valori contenuti in un array inizializzato all'interno della procedura.
+
+Conoscendo tutti questi valori possiamo quindi creare un sistema lineare dove poniamo come incognite le quattro parti in cui il nostro valore di ingresso è stato diviso e una volta che abbiamo ottenuto il valore andiamo a fare il reverse dell'operazione di `>>` per ottenere il valore corretto.
 
 ```python
 import numpy as np
 import math
 
-"""
+""" fourth_check() - from ghidra
   uint32_t a = n & 0xFF;
   uint32_t b = (n >> 8) & 0xFF;
   uint32_t c = (n >> 16) & 0xFF;
@@ -131,28 +154,21 @@ import math
   uint32_t vals[4] = {61319, 38111, 48787, 48939};
 """
 
-
 def char_to_str(chrs):
     return [ord(c) for c in chrs]
 
-
-incognite = np.array(
-    [char_to_str("Jojo"), char_to_str("DIO!"), char_to_str("ZAWA"), char_to_str("RUDO")]
-)
+incognite = np.array([char_to_str("Jojo"), char_to_str("DIO!"), char_to_str("ZAWA"), char_to_str("RUDO")])
 valori = np.array([61319, 38111, 48787, 48939])
 risultato = np.linalg.solve(incognite, valori)
-
-print("Values are: {}".format(risultato))
-
+print("Values are: {}".format(risultato)) # Values are: [198.  96. 146. 185.]
 
 values = [198, 96, 146, 185]
 values.reverse()
-
 binary = ["{0:08b}".format(b) for b in values]
-print("Value: {}".format(int("".join(binary), 2)))
+print("Value: {}".format(int("".join(binary), 2))) # 3113377990
 ```
 
-Passando questo valore al crackme otteniamo un Hash.
+Eseguiamo quindi crackme passando come parametro il valore calcolato e otteniamo un HASH(SHA2).
 
 ```bash
 ./crackme 3113377990
@@ -161,36 +177,30 @@ Passando questo valore al crackme otteniamo un Hash.
 
 #### Hint 3
 
-Nell'eseguibile viene eseguito un controllo tra la stringa "stuck" e una
-variabile di nome `hint`. Se andiamo a controllare il valore della variabile,
-ci consiglia di trovare dinamicamente la funzione chiamata dal main o di
-cambiare il tipo della variabile `table` in un array di funzioni per capire
-quale di queste chiami.
+Nell'eseguibile viene eseguito un controllo tra la stringa "stuck" e una variabile di nome `hint`.
+Se andiamo a controllare il valore della variabile, ci consiglia di trovare dinamicamente la funzione chiamata dal main o di cambiare il tipo della variabile `table` in un array di funzioni per capire quale di queste chiami. La stringa la possiamo notare eseguendo strings del nostro eseguibile.
 
 ### Steganography
 
-Torniamo a considerare un attimo l'immagine `helpful.png`
+Consideriamo l'immagine `helpful.png`
 
 ```bash
 strings helpful.png
+# at Least you're putting Significant effort into this challenge
 ```
 
-Dato il suggerimento proviamo a vedere se abbiamo qualcosa nei [bit meno
-significativi](https://www.boiteaklou.fr/Steganography-Least-Significant-Bit.html).
+Dato il suggerimento proviamo a vedere se abbiamo qualcosa nei [bit meno significativi](https://www.boiteaklou.fr/Steganography-Least-Significant-Bit.html).
+Utilizzando il codice fornito all'interno della pagina web otteniamo il nostro messaggio nascosto.
 
 ```python
 import base64
 from PIL import Image
 
 image = Image.open("./helpful.png")
-
 extracted = ''
-
 pixels = image.load()
-# Iterate over pixels of the first row
 for x in range(0,image.width):
     r,g,b = pixels[x,0]
-    # Store LSB of each color channel of each pixel
     extracted += bin(r)[-1]
     extracted += bin(g)[-1]
     extracted += bin(b)[-1]
@@ -200,23 +210,46 @@ for i in range(len(extracted)//8):
     byte = extracted[(i*8):(i+1)*8]
     chars.append(chr(int(''.join([str(bit) for bit in byte]), 2)))
 
-# Don't forget that the message was base64-encoded
 flag = ''.join(chars)
-print(flag)
+print(flag) # This website might help you a lot: https://ecavicc.github.io/cyberchallenge/
 ```
 
 ### Cracking
 
-Dal sito con un attimo di fantasia capiamo di utilizzare #cat -> hashcat e
-tramite la canzone di supportarci con rockyou.txt
+Andiamo a forzare l'hash che abbiamo ottenuto dall'eseguibile per ottenere la password che ci permetterà di ottenere la flag.
+Per crackare l'hash andremo a utlizzare hashcat fornendo una wordlist, si può anche trovare la soluzione su [CrackStation](https://crackstation.net/)
 
 ```bash
 hashcat -a 0 -m 1700 hash rockyou.txt
 # Mr.Pickles
 ```
 
+#### Hint 4
+
+Il sito a cui veniamo ridirezionati dall'immagine contiene il simbolo # e un gattino da qui possiamo collegare i due elementi e ottenere `hashcat`. Inoltre il link presente infondo alla pagina, che porta alla canzione We Will Rock You, vuole essere un suggerimento a utilizzare una wordlist di supporto.
+
 ## Conclusione
 
 Eseguiamo il file python per ottenere la flag
 
+```bash
+echo "Mr.Pickles" > passwd
+python3 get_flag.py < passwd
+```
+
 `FLAG{i_7urn3d_mys31f_i1n70_4_pick13}`
+
+## Extras
+
+Piccoli easter-egg presenti nella sfida :D
+
+### ForgetPassword
+
+Premere più volte `forget password` potrebbe aiutare
+
+### CopyPasta
+Crackme potrebbe esprimersi su Rick & Morty
+
+### HelloThere
+
+Il sito nascosto da Clippy - con un gran icona - potrebbe avere un saluto altrettanto nascosto
