@@ -40,7 +40,7 @@ Accediamo al sito e troviamo che il campo username è vulnerabile a SQLI ber il
 bypass dell'autenticazione.
 
 ```sql
-admin' or '1'='1
+admin' --
 ```
 
 Questo ci permette di scaricare un file `disk`.
