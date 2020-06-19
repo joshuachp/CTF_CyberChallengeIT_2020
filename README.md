@@ -2,7 +2,7 @@
 
 Challenge del gruppo 1
 
-[](https://joshuachp.github.io/posts/ccit_challenge/)
+[Blog post for challenge](https://joshuachp.github.io/posts/ccit_challenge/)
 
 ## Filesystem
 
