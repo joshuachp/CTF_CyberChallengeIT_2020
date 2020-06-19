@@ -1,6 +1,8 @@
 # CTF_CyberChallenge
 
-Challenge di reverse engineering del gruppo 1
+Challenge del gruppo 1
+
+[](https://joshuachp.github.io/posts/ccit_challenge/)
 
 ## Filesystem
 
